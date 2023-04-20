@@ -1,0 +1,19 @@
+<nz-card
+  [nzLoading]="loading"
+  class="tabs-card"
+  [nzBordered]="false"
+  [nzTitle]="tagTitleTpl"
+  [nzExtra]="extraTemplate1"
+  [nzBodyStyle]="{ 'padding-top': '0' }"
+>
+  <ng-template #extraTemplate1>
+    <a nz-button nzType="primary" [routerLink]="['/']">全部应用</a>
+  </ng-template>
+  <ng-template #tagTitleTpl>
+    <h1 [style.margin-bottom]="0">{{ project?.Name }} {{ project?.ApiAddress }}</h1>
+    <nz-tabset nzSize="small" [nzSelectedIndex]="pos">
+      <nz-tab *ngFor="let i of tabs" [nzTitle]="i.tab" (nzClick)="to(i)"></nz-tab>
+    </nz-tabset>
+  </ng-template>
+  <router-outlet></router-outlet>
+</nz-card>

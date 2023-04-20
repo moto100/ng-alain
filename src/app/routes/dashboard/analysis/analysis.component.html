@@ -91,7 +91,7 @@
               <li *ngFor="let i of rankingListData; let idx = index">
                 <span class="number" [ngClass]="{ active: idx < 3 }">{{ idx + 1 }}</span>
                 <span class="title">{{ i.title }}</span>
-                <span class="value">{{ i.total | number: '3.0' }}</span>
+                <span class="value">{{ i.total | number : '3.0' }}</span>
               </li>
             </ul>
           </div>

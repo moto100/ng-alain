@@ -1,0 +1,30 @@
+<div class="py-lg">
+  <form nz-form [formGroup]="form" se-container="1" labelWidth="200">
+    <se label="InfluxDB">
+      <nz-switch formControlName="EnableInfluxDB" nzCheckedChildren="启用" nzUnCheckedChildren="不启用"></nz-switch>
+    </se>
+    <se *ngIf="form.value.EnableInfluxDB" label="InfluxDB地址">
+      <input nz-input formControlName="InfluxDBAddress" placeholder="请输入已存在的InfluxDB地址" />
+    </se>
+    <se *ngIf="form.value.EnableInfluxDB" label="InfluxDB AccessToken">
+      <input nz-input formControlName="InfluxDBAccessToken" placeholder="请输入已存在的InfluxDB AccessToken" />
+    </se>
+    <se *ngIf="form.value.EnableInfluxDB" label="InfluxDB OrganizationId">
+      <input nz-input formControlName="InfluxDBOrganizationId" placeholder="请输入已存在的InfluxDB OrganizationId" />
+    </se>
+    <se *ngIf="form.value.EnableInfluxDB" label="InfluxDB BucketName">
+      <input nz-input formControlName="InfluxDBBucketName" placeholder="请输入已存在的InfluxDB BucketName" />
+    </se>
+    <se *ngIf="form.value.EnableInfluxDB" label="InfluxDB Measurement">
+      <input
+        nz-input
+        formControlName="InfluxDBMeasurement"
+        placeholder="请输入已存在的InfluxDB Measurement，或者系统直接新建的Measurement名字"
+      />
+    </se>
+
+    <se>
+      <button nz-button nzType="primary" [disabled]="form.invalid" (click)="submit()" [nzLoading]="submitting">保存</button>
+    </se>
+  </form>
+</div>

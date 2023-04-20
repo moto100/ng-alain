@@ -1,0 +1,86 @@
+<page-header [breadcrumb]="breadcrumb" [autoTitle]="false">
+  <ng-template #breadcrumb>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        <a [routerLink]="['/']">首页</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>全部应用</nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </ng-template>
+</page-header>
+<button nz-button nz-dropdown [nzDropdownMenu]="menu" [nzType]="'primary'">
+  <i nz-icon nzType="plus"></i>
+  <span>新建应用</span>
+</button>
+<button nz-button nz-dropdown [nzType]="'primary'" (click)="startAllDepolyedProjects()">
+  <span>运行全部已发布的应用</span>
+</button>
+<button nz-button nz-dropdown [nzType]="'primary'" (click)="stopAllDepolyedProjects()">
+  <span>停止全部运行中的应用</span>
+</button>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item (click)="addNewProject()">
+      <a>新建空应用</a>
+    </li>
+    <!-- <li nz-menu-item >
+      <a>导入应用</a>
+    </li> -->
+  </ul>
+</nz-dropdown-menu>
+<br />
+<nz-list [nzLoading]="loading" [nzDataSource]="list" [nzRenderItem]="item" [nzGrid]="{ gutter: 24, lg: 8, md: 12, sm: 24, xs: 24 }">
+  <ng-template #item let-item>
+    <nz-list-item>
+      <!-- <button *ngIf="item === null" nz-button  (click)="addNewProject()" nzType="dashed" style="width: 100%; height: 193px;">
+        <i nz-icon nzType="plus"></i>
+        <span>新建应用</span>
+      </button> -->
+      <nz-card nzHoverable *ngIf="item !== null" [nzActions]="[op1, op2, op3]">
+        <ng-template #op1>
+          <a (click)="editProject(item)">编辑应用</a>
+        </ng-template>
+        <ng-template #op2>
+          <a (click)="designProject(item)">设计应用模型</a>
+        </ng-template>
+        <ng-template #op3>
+          <i nz-dropdown [nzDropdownMenu]="op4Menu" nzPlacement="bottomLeft" nz-icon nzType="ellipsis"></i>
+          <nz-dropdown-menu #op4Menu="nzDropdownMenu">
+            <i nz-dropdown nz-icon nzType="ellipsis"></i>
+            <ul nz-menu>
+              <li *ngIf="!item.Deployed" nz-menu-item (click)="deployProject(item)">发布/运行应用</li>
+              <li *ngIf="item.Deployed" nz-menu-item (click)="deployProject(item)">重新发布/运行应用</li>
+              <li *ngIf="item.Deployed" nz-menu-item (click)="undeployProject(item)">停止运行应用</li>
+              <li nz-menu-divider></li>
+              <nz-upload
+                nzAccept=".json"
+                nzShowUploadList="false"
+                [nzData]="{ function: 'UploadProject', projectId: item.Id }"
+                nzAction="controlpanel/uploadfile"
+                (nzChange)="handleFileStatusChange($event)"
+              >
+                <li nz-menu-item>导入应用</li>
+              </nz-upload>
+              <li nz-menu-item (click)="exportProject(item)">导出应用</li>
+              <li *ngIf="!item.Deployed" nz-menu-divider></li>
+              <li *ngIf="!item.Deployed" nz-menu-item (click)="deleteProject(item)">删除应用</li>
+            </ul>
+          </nz-dropdown-menu>
+        </ng-template>
+        <nz-card-meta [nzAvatar]="nzAvatar" [nzTitle]="nzTitle" [nzDescription]="nzDescription">
+          <ng-template #nzAvatar>
+            <!-- <nz-avatar nzSize="large" [nzSrc]="item.Avatar"></nz-avatar>
+            -->
+          </ng-template>
+          <ng-template #nzTitle>
+            <nz-badge *ngIf="item.IsRunning" nzStatus="processing"></nz-badge> <span *ngIf="item.Deployed">[已发布]</span>{{ item.Name }}
+            <br /><span>Api地址 : {{ item.ApiAddress }}</span>
+          </ng-template>
+          <ng-template #nzDescription>
+            <ellipsis lines="4" tooltip>{{ item.Desc }}</ellipsis>
+          </ng-template>
+        </nz-card-meta>
+      </nz-card>
+    </nz-list-item>
+  </ng-template>
+</nz-list>

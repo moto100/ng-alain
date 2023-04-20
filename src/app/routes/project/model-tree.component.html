@@ -1,0 +1,36 @@
+<div nz-row class="py-lg">
+  <div nz-col nzMd="6" nzLg="6" style="height: 800px; overflow: auto">
+    <nz-tree
+      [nzData]="nodes"
+      (nzClick)="clickOnNode($event)"
+      (nzDblClick)="dclickOnNode($event)"
+      [nzTreeTemplate]="nzTreeTemplate"
+      nzShowLine
+    ></nz-tree>
+
+    <ng-template #nzTreeTemplate let-node let-origin="origin">
+      <span class="custom-node">
+        <span (contextmenu)="contextMenu($event, menu)">
+          <span class="file-name">{{ node.title }}</span>
+          <nz-badge *ngIf="node.origin.modelNode != null" [nzStatus]="node.origin.modelNode.IsHiden ? 'warning' : 'success'"> </nz-badge>
+        </span>
+      </span>
+
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="addNewNode(node)">新增子节点</li>
+          <li nz-menu-item *ngIf="node.parentNode != null" (click)="copyPasteAddNewSubNode(node)">复制节点创建子节点</li>
+          <li nz-menu-item *ngIf="node.parentNode != null" (click)="copyPasteAddNewBrotherNode(node)">复制节点创建兄弟节点</li>
+          <li nz-menu-item *ngIf="node.parentNode != null" (click)="deleteNode(node)">删除</li>
+        </ul>
+      </nz-dropdown-menu>
+    </ng-template>
+  </div>
+  <div nz-col nzMd="16" nzLg="16">
+    <app-node-form
+      *ngIf="selectedModelNode != null"
+      (modelNodeChange)="updateModelHandler($event)"
+      [modelNode]="selectedModelNode"
+    ></app-node-form>
+  </div>
+</div>

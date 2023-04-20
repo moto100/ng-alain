@@ -35,8 +35,8 @@ export class UserLoginComponent implements OnDestroy {
   // #region fields
 
   form = this.fb.nonNullable.group({
-    userName: ['', [Validators.required, Validators.pattern(/^(admin|user)$/)]],
-    password: ['', [Validators.required, Validators.pattern(/^(ng\-alain\.com)$/)]],
+    userName: ['', [Validators.required]],
+    password: ['', [Validators.required]],
     mobile: ['', [Validators.required, Validators.pattern(/^1\d{10}$/)]],
     captcha: ['', [Validators.required]],
     remember: [true]
@@ -102,9 +102,10 @@ export class UserLoginComponent implements OnDestroy {
     this.cdr.detectChanges();
     this.http
       .post(
-        '/login/account',
+        'controlpanel/www?_allow_anonymous=true',
         {
           type: this.type,
+          function: 'Login',
           userName: this.form.value.userName,
           password: this.form.value.password
         },
@@ -120,17 +121,16 @@ export class UserLoginComponent implements OnDestroy {
         })
       )
       .subscribe(res => {
-        if (res.msg !== 'ok') {
-          this.error = res.msg;
-          this.cdr.detectChanges();
+        if (res.Status !== 200) {
+          this.error = res.Message;
           return;
         }
         // 清空路由复用信息
         this.reuseTabService.clear();
         // 设置用户Token信息
         // TODO: Mock expired value
-        res.user.expired = +new Date() + 1000 * 60 * 5;
-        this.tokenService.set(res.user);
+        res.Data.expired = +new Date() + 1000 * 60 * 5;
+        this.tokenService.set(res.Data);
         // 重新获取 StartupService 内容，我们始终认为应用信息一般都会受当前用户授权范围而影响
         this.startupSrv.load().subscribe(() => {
           let url = this.tokenService.referrer!.url || '/';

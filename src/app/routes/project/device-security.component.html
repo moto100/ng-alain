@@ -1,0 +1,54 @@
+<div class="py-lg">
+  <form nz-form [formGroup]="form" se-container="1" labelWidth="100">
+    <se label="接入模式" required>
+      <nz-radio-group formControlName="EnableMode" nzSize="small">
+        <label nz-radio [nzValue]="1">停止安全控制</label><br />
+        <label nz-radio [nzValue]="2"
+          >以白名单形式进行安全接入控制：仅在下列列表中的设备可以接入平台，这种情况下可以是 1. 仅设备Id，
+          2.用户名和密码，3.设备Id，用户名和密码三者同时生效。</label
+        ><br />
+        <label nz-radio [nzValue]="3"
+          >以黑名单形式进行安全接入控制：仅在下列列表中的设备不可以接入平台，以外设备都可以接入，这种情况下仅仅设备Id内容有效。</label
+        >
+      </nz-radio-group>
+    </se>
+    <se label="规则">
+      <button nz-button nzType="primary" (click)="addRule()">增加安全规则</button>
+      <ul style="padding-left: 0">
+        <li style="list-style-type: none" *ngFor="let rule of list">
+          <nz-switch
+            [(ngModel)]="rule.Enabled"
+            [ngModelOptions]="{ standalone: true }"
+            nzCheckedChildren="开启"
+            nzUnCheckedChildren="关闭"
+          ></nz-switch>
+          设备Id:
+          <input
+            [(ngModel)]="rule.DeviceId"
+            [ngModelOptions]="{ standalone: true }"
+            style="margin-right: 10px"
+            placeholder="指定接入设备Id"
+          />
+          用户名：
+          <input
+            [(ngModel)]="rule.UserName"
+            [ngModelOptions]="{ standalone: true }"
+            style="margin-right: 10px"
+            placeholder="指定接入用户名"
+          />
+          密码：
+          <input
+            [(ngModel)]="rule.Password"
+            [ngModelOptions]="{ standalone: true }"
+            style="margin-right: 10px"
+            placeholder="指定接入密码"
+          />
+          <button nz-button nzSize="small" (click)="deleteRule(rule)">删除</button>
+        </li>
+      </ul>
+    </se>
+    <se>
+      <button nz-button nzType="primary" [disabled]="form.invalid" (click)="submit()" [nzLoading]="submitting">保存</button>
+    </se>
+  </form>
+</div>

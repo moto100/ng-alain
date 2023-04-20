@@ -30,8 +30,7 @@
           "ng-deep"
         ]
       }
-    ],
-    "import-notation": "string"
+    ]
   },
   "ignoreFiles": [
     "src/assets/**/*"

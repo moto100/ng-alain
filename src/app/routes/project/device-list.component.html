@@ -1,0 +1,46 @@
+<div class="py-lg">
+  <button nz-button nz-dropdown [nzDropdownMenu]="menu" [nzType]="'primary'">
+    <i nz-icon nzType="plus"></i>
+    <span>新建虚拟设备</span>
+  </button>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <li nz-menu-item (click)="AddMQTTDevice()">
+        <a>MQTT</a>
+      </li>
+      <li nz-menu-item (click)="AddSimulator()">
+        <a>测试设备模拟器</a>
+      </li>
+    </ul>
+  </nz-dropdown-menu>
+</div>
+
+<nz-list
+  [nzLoading]="loading"
+  [nzDataSource]="list"
+  [nzRenderItem]="item"
+  [nzGrid]="{ gutter: 24, xxl: 8, xl: 12, lg: 12, md: 12, sm: 12, xs: 24 }"
+>
+  <ng-template #item let-item>
+    <nz-list-item>
+      <nz-card nzHoverable [nzActions]="[op2, op3]">
+        <ng-template #op2>
+          <i nz-tooltip nzTooltipTitle="编辑" nz-icon nzType="edit" (click)="EditDevice(item)"></i>
+        </ng-template>
+        <ng-template #op3>
+          <i nz-tooltip nzTooltipTitle="删除" nz-icon nzType="delete" (click)="DeleteDevice(item)"></i>
+        </ng-template>
+        <div class="card-info d-flex">
+          <div>
+            <p>虚拟设备名称 </p>
+            <p>
+              <nz-badge *ngIf="item != null" [nzStatus]="item.Enable ? 'success' : 'warning'">
+                {{ item.Name }}
+              </nz-badge>
+            </p>
+          </div>
+        </div>
+      </nz-card>
+    </nz-list-item>
+  </ng-template>
+</nz-list>

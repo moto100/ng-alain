@@ -71,6 +71,11 @@ export class DefaultInterceptor implements HttpInterceptor {
     }
 
     const errortext = CODEMESSAGE[ev.status] || ev.statusText;
+    let str = ev.url?.indexOf('service/KeepAlive');
+    if (str != null && str > -1) {
+      console.log(`请求错误 ${ev.status}: ${ev.url}`, errortext);
+      return;
+    }
     this.notification.error(`请求错误 ${ev.status}: ${ev.url}`, errortext);
   }
 
@@ -79,7 +84,9 @@ export class DefaultInterceptor implements HttpInterceptor {
    */
   private refreshTokenRequest(): Observable<any> {
     const model = this.tokenSrv.get();
-    return this.http.post(`/api/auth/refresh`, null, null, { headers: { refresh_token: model?.['refresh_token'] || '' } });
+    return this.http.post(`controlpanel/www`, { function: 'RefreshToken' }, null, {
+      headers: { refresh_token: model?.['refresh_token'] || '' }
+    });
   }
 
   // #region 刷新Token方式一：使用 401 重新刷新 Token
@@ -106,9 +113,9 @@ export class DefaultInterceptor implements HttpInterceptor {
       switchMap(res => {
         // 通知后续请求继续执行
         this.refreshToking = false;
-        this.refreshToken$.next(res);
+        this.refreshToken$.next(res.Data);
         // 重新保存新 token
-        this.tokenSrv.set(res);
+        this.tokenSrv.set(res.Data);
         // 重新发起请求
         return next.handle(this.reAttachToken(req));
       }),
@@ -157,7 +164,7 @@ export class DefaultInterceptor implements HttpInterceptor {
           // TODO: Mock expired value
           res.expired = +new Date() + 1000 * 60 * 5;
           this.refreshToking = false;
-          this.tokenSrv.set(res);
+          this.tokenSrv.set(res.Data);
         },
         error: () => this.toLogin()
       });
@@ -204,7 +211,15 @@ export class DefaultInterceptor implements HttpInterceptor {
         if (this.refreshTokenEnabled && this.refreshTokenType === 're-request') {
           return this.tryRefreshToken(ev, req, next);
         }
-        this.toLogin();
+
+        const errortext = CODEMESSAGE[ev.status] || ev.statusText;
+        let str = ev.url?.indexOf('service/KeepAlive');
+        if (str != null && str > -1) {
+          console.log(`请求错误 ${ev.status}: ${ev.url}`, errortext);
+        } else {
+          this.toLogin();
+        }
+
         break;
       case 403:
       case 404:
@@ -240,9 +255,12 @@ export class DefaultInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // 统一加上服务端前缀
     let url = req.url;
-    if (!req.context.get(IGNORE_BASE_URL) && !url.startsWith('https://') && !url.startsWith('http://')) {
-      const { baseUrl } = environment.api;
-      url = baseUrl + (baseUrl.endsWith('/') && url.startsWith('/') ? url.substring(1) : url);
+    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+      if (!environment.production && url.startsWith('controlpanel/')) {
+        url = `http://localhost:7001/${url}`;
+      } else {
+        url = environment.api.baseUrl + url;
+      }
     }
 
     const newReq = req.clone({ url, setHeaders: this.getAdditionalHeaders(req.headers) });

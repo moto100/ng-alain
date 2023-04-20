@@ -1,0 +1,45 @@
+<nz-card [nzBordered]="false">
+  <form nz-form [formGroup]="form" se-container="1" labelWidth="200">
+    <se label="名称" error="请输入一个好记的应用名称" required>
+      <input nz-input formControlName="Name" placeholder="给应用起个名字" />
+    </se>
+    <se label="Api地址" error="请输入一个好记的应用Api入口地址" required>
+      <input nz-input formControlName="ApiAddress" placeholder="请输入一个好记的应用Api入口地址: http://192.168.31.217:9001/" />
+    </se>
+    <se label="站点编码">
+      <span>{{ SiteCode() }}</span>
+    </se>
+    <se label="日志级别">
+      <nz-radio-group formControlName="LogLevel">
+        <label nz-radio nzValue="Error">Error</label>
+        <label nz-radio nzValue="Warning">Warning</label>
+        <label nz-radio nzValue="Trace">Trace</label>
+      </nz-radio-group>
+    </se>
+    <!-- <se label="InfluxDB">
+      <nz-switch formControlName="EnableInfluxDB" nzCheckedChildren="启用" nzUnCheckedChildren="不启用"></nz-switch>
+    </se>
+    <se *ngIf = "form.value.EnableInfluxDB" label="InfluxDB地址">
+      <input nz-input formControlName="InfluxDBAddress" placeholder="请输入正确的InfluxDB地址" />
+    </se>
+    <se *ngIf = "form.value.EnableInfluxDB" label="InfluxDB OrganizationId" >
+      <input nz-input formControlName="InfluxDBOrganizationId" placeholder="请输入正确的InfluxDB OrganizationId" />
+    </se>
+    <se *ngIf = "form.value.EnableInfluxDB" label="InfluxDB BucketName" >
+      <input nz-input formControlName="InfluxDBBucketName" placeholder="请输入正确的InfluxDB BucketName" />
+    </se>
+    <se *ngIf = "form.value.EnableInfluxDB" label="InfluxDB Measurement" >
+      <input nz-input formControlName="InfluxDBMeasurement" placeholder="请输入正确的InfluxDB Measurement" />
+    </se>
+    <se *ngIf = "form.value.EnableInfluxDB" label="InfluxDB AccessToken">
+      <input nz-input formControlName="InfluxDBAccessToken" placeholder="请输入正确的InfluxDB AccessToken" />
+    </se> -->
+    <se label="描述" error="请输入应用描述">
+      <textarea nz-input formControlName="Desc" [nzAutosize]="{ minRows: 4 }" placeholder="请输入应用描述"></textarea>
+    </se>
+    <se>
+      <button nz-button nzType="primary" [disabled]="form.invalid" (click)="submit()" [nzLoading]="submitting">保存</button>
+      <button nz-button class="ml-sm" (click)="cancel()">取消</button>
+    </se>
+  </form>
+</nz-card>

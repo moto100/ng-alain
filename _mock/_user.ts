@@ -102,12 +102,12 @@ export const USERS = {
   'POST /user/avatar': 'ok',
   'POST /login/account': (req: MockRequest) => {
     const data = req.body;
-    if (!(data.userName === 'admin' || data.userName === 'user') || data.password !== 'ng-alain.com') {
-      return { msg: `Invalid username or password（admin/ng-alain.com）` };
+    if (data.userName !== 'sunup' && data.password !== 'temptemp') {
+      return { Status: 23 , Message: `Invalid username or password` };
     }
     return {
-      msg: 'ok',
-      user: {
+      Status: 200,
+      Data: {
         token: '123456789',
         name: data.userName,
         email: `${data.userName}@qq.com`,
