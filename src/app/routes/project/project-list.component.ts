@@ -272,7 +272,7 @@ export class ProjectListComponent implements OnInit {
   }
   undeployProject(item: any): void {
     this.modalSrv.confirm({
-      nzTitle: '<i>确定要停止运行该应用？</i>',
+      nzTitle: '<i>确定要卸载运行的该应用？</i>',
       nzContent: item.Name,
       nzOnOk: () => {
         let project = this.list.find(value => value?.Id == item.Id);

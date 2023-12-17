@@ -12,12 +12,12 @@
   <i nz-icon nzType="plus"></i>
   <span>新建应用</span>
 </button>
-<button nz-button nz-dropdown [nzType]="'primary'" (click)="startAllDepolyedProjects()">
+<!-- <button nz-button nz-dropdown [nzType]="'primary'" (click)="startAllDepolyedProjects()">
   <span>运行全部已发布的应用</span>
 </button>
 <button nz-button nz-dropdown [nzType]="'primary'" (click)="stopAllDepolyedProjects()">
   <span>停止全部运行中的应用</span>
-</button>
+</button> -->
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item (click)="addNewProject()">
@@ -48,9 +48,9 @@
           <nz-dropdown-menu #op4Menu="nzDropdownMenu">
             <i nz-dropdown nz-icon nzType="ellipsis"></i>
             <ul nz-menu>
-              <li *ngIf="!item.Deployed" nz-menu-item (click)="deployProject(item)">发布/运行应用</li>
-              <li *ngIf="item.Deployed" nz-menu-item (click)="deployProject(item)">重新发布/运行应用</li>
-              <li *ngIf="item.Deployed" nz-menu-item (click)="undeployProject(item)">停止运行应用</li>
+              <li *ngIf="!item.Deployed" nz-menu-item (click)="deployProject(item)">发布应用</li>
+              <li *ngIf="item.Deployed" nz-menu-item (click)="deployProject(item)">重新发布应用</li>
+              <li *ngIf="item.Deployed" nz-menu-item (click)="undeployProject(item)">卸载应用</li>
               <li nz-menu-divider></li>
               <nz-upload
                 nzAccept=".json"
