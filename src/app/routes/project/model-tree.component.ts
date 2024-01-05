@@ -4,7 +4,7 @@ import { _HttpClient } from '@delon/theme';
 import { UUID } from 'angular2-uuid';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
+import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 import { finalize } from 'rxjs';
 
 @Component({

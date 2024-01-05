@@ -68,13 +68,11 @@
           </nz-dropdown-menu>
         </ng-template>
         <nz-card-meta [nzAvatar]="nzAvatar" [nzTitle]="nzTitle" [nzDescription]="nzDescription">
-          <ng-template #nzAvatar>
-            <!-- <nz-avatar nzSize="large" [nzSrc]="item.Avatar"></nz-avatar>
-            -->
-          </ng-template>
+          <ng-template #nzAvatar />
           <ng-template #nzTitle>
-            <nz-badge *ngIf="item.IsRunning" nzStatus="processing"></nz-badge> <span *ngIf="item.Deployed">[已发布]</span>{{ item.Name }}
-            <br /><span>Api地址 : {{ item.ApiAddress }}</span>
+            <nz-badge *ngIf="item.IsRunning" nzStatus="processing" /> <span *ngIf="item.Deployed">[已发布]</span>{{ item.Name }} <br /><span
+              >Api地址 : {{ item.ApiAddress }}</span
+            >
           </ng-template>
           <ng-template #nzDescription>
             <ellipsis lines="4" tooltip>{{ item.Desc }}</ellipsis>

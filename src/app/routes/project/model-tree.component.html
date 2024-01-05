@@ -6,13 +6,13 @@
       (nzDblClick)="dclickOnNode($event)"
       [nzTreeTemplate]="nzTreeTemplate"
       nzShowLine
-    ></nz-tree>
+    />
 
     <ng-template #nzTreeTemplate let-node let-origin="origin">
       <span class="custom-node">
         <span (contextmenu)="contextMenu($event, menu)">
           <span class="file-name">{{ node.title }}</span>
-          <nz-badge *ngIf="node.origin.modelNode != null" [nzStatus]="node.origin.modelNode.IsHiden ? 'warning' : 'success'"> </nz-badge>
+          <nz-badge *ngIf="node.origin.modelNode != null" [nzStatus]="node.origin.modelNode.IsHiden ? 'warning' : 'success'" />
         </span>
       </span>
 
@@ -27,10 +27,6 @@
     </ng-template>
   </div>
   <div nz-col nzMd="16" nzLg="16">
-    <app-node-form
-      *ngIf="selectedModelNode != null"
-      (modelNodeChange)="updateModelHandler($event)"
-      [modelNode]="selectedModelNode"
-    ></app-node-form>
+    <app-node-form *ngIf="selectedModelNode != null" (modelNodeChange)="updateModelHandler($event)" [modelNode]="selectedModelNode" />
   </div>
 </div>

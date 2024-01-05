@@ -7,11 +7,15 @@ import {
   Output,
   EventEmitter,
   SimpleChanges,
-  OnChanges
+  OnChanges,
+  inject
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
+interface IModalData {
+  Device: any;
+}
 
 @Component({
   selector: 'app-simulater',
@@ -47,9 +51,16 @@ export class SimulaterComponent implements OnInit {
     " return '';" +
     '}' +
     '}';
-  constructor(private fb: FormBuilder, private msg: NzMessageService, private modal: NzModalRef, private cdr: ChangeDetectorRef) {}
+  readonly nzModalData: IModalData = inject(NZ_MODAL_DATA);
+  constructor(
+    private fb: FormBuilder,
+    private msg: NzMessageService,
+    private modal: NzModalRef,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    this.Device = this.nzModalData.Device;
     this.form = this.fb.group({
       Name: [this.Device.Name, [Validators.required]],
       Enable: [this.Device.Enable, []],

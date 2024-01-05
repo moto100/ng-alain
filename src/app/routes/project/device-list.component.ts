@@ -70,7 +70,7 @@ export class DeviceListComponent {
       nzFooter: null,
       nzWidth: 1000,
       nzStyle: { top: '10px' },
-      nzComponentParams: {
+      nzData: {
         Device: device
       }
     });

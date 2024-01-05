@@ -216,7 +216,7 @@ export class ProjectListComponent implements OnInit {
       nzStyle: { top: '10px' },
       nzContent: ProjectFormComponent,
       nzFooter: null,
-      nzComponentParams: {
+      nzData: {
         projectInfo: project,
         list: list.filter((x: { Id: any }) => x?.Id != project.Id)
       }

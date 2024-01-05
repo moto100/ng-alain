@@ -1,13 +1,18 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { G2MiniBarData } from '@delon/chart/mini-bar';
+import { G2MiniAreaModule } from '@delon/chart/mini-area';
+import { G2MiniBarData, G2MiniBarModule } from '@delon/chart/mini-bar';
 import { _HttpClient } from '@delon/theme';
+import { SHARED_IMPORTS } from '@shared';
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-widgets',
   templateUrl: './widgets.component.html',
   styleUrls: ['./widgets.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [...SHARED_IMPORTS, NzCarouselModule, G2MiniBarModule, G2MiniAreaModule]
 })
 export class WidgetsComponent implements OnInit {
   data: G2MiniBarData[] = [];
@@ -53,7 +58,11 @@ export class WidgetsComponent implements OnInit {
   like = false;
   dislike = false;
 
-  constructor(public msg: NzMessageService, private http: _HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(
+    public msg: NzMessageService,
+    private http: _HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.http.get('/chart/visit').subscribe((res: G2MiniBarData[]) => {

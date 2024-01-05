@@ -1,7 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, inject, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
+interface IModalData {
+  projectInfo: any;
+  list: any;
+}
 
 @Component({
   selector: 'app-project-form',
@@ -28,9 +32,18 @@ export class ProjectFormComponent implements OnInit {
     // InfluxDBMeasurement: string;
     // InfluxDBAccessToken: string;
   }> = [];
-  constructor(private fb: FormBuilder, private msg: NzMessageService, private modal: NzModalRef, private cdr: ChangeDetectorRef) {}
+  //readonly #modal = inject(NzModalRef);
+  readonly nzModalData: IModalData = inject(NZ_MODAL_DATA);
+  constructor(
+    private fb: FormBuilder,
+    private msg: NzMessageService,
+    private modal: NzModalRef,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
+    this.projectInfo = this.nzModalData.projectInfo;
+    this.list = this.nzModalData.list;
     this.form = this.fb.group({
       Name: [this.projectInfo.Name, [Validators.required]],
       ApiAddress: [this.projectInfo.ApiAddress, [Validators.required]],
