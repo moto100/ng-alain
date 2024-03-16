@@ -43,7 +43,7 @@
       this.predefinedJSObject +
       '    第三步 在拷贝到<JS活页>的脚本的下面继续编写自己的脚本，点<运行>测试脚本，确保脚本不出错。 第四步  拷贝回自己编写的脚本到平台上对应的位置。'
     "
-    extra="支持基于JavaScript算术计算和内置对象,例如 DevicesProxy.GetData('虚拟设备名称','虚拟设备字段');也可以引用其他节点，格式：Root.节点1.节点1-1.Value = 'AAA'."
+    extra="支持基于JavaScript算术计算和内置对象,例如 DevicesProxy.GetData('虚拟设备名称','虚拟设备字段');也可以引用其他节点，格式：Root.节点1.节点1-1.Value。"
   >
     <input nz-input formControlName="Expression" placeholder="给该节点设置一个表达式来计算节点的数值。" />
   </se>
@@ -64,11 +64,17 @@
       placeholder="当该节点的数值变化后会执行的脚本，通常是来触发关联节点的数据更新。"
     ></textarea>
   </se>
-  <se label="回写设备名称">
-    <input nz-input formControlName="BoundDevice" placeholder="用于绑定到对应的回写设备，设备名称是虚拟设备名称。" />
+  <se label="入站设备名称" extra="当设置了此项，原本的《表达式》设置会失效！！！">
+    <input nz-input formControlName="InboundDevice" placeholder="用于绑定到对应的入站设备，设备名称是虚拟设备名称。" />
   </se>
-  <se label="回写字段名称">
-    <input nz-input formControlName="BoundField" placeholder="用于绑定到对应的回写字段，字段是虚拟设备上的字段。" />
+  <se label="入站字段名称" extra="当设置了此项，原本的《表达式》设置会失效！！！">
+    <input nz-input formControlName="InboundField" placeholder="用于绑定到对应的入站字段，字段是虚拟设备上的字段。" />
+  </se>
+  <se label="出站设备名称">
+    <input nz-input formControlName="OutboundDevice" placeholder="用于绑定到对应的出站设备，设备名称是虚拟设备名称。" />
+  </se>
+  <se label="出站字段名称">
+    <input nz-input formControlName="OutboundField" placeholder="用于绑定到对应的出站字段，字段是虚拟设备上的字段。" />
   </se>
   <se>
     <button nz-button nzType="primary" [disabled]="form.invalid" type="submit" [nzLoading]="submitting">保存</button>

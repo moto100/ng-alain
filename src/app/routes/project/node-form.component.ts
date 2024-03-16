@@ -38,7 +38,11 @@ export class NodeFormComponent implements OnChanges {
     " return '';" +
     '}' +
     '}';
-  constructor(private fb: FormBuilder, private msg: NzMessageService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private fb: FormBuilder,
+    private msg: NzMessageService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     this.form = this.fb.group({
@@ -52,8 +56,10 @@ export class NodeFormComponent implements OnChanges {
       ],
       Expression: [changes?.['modelNode'].currentValue.Expression, []],
       Action: [changes?.['modelNode'].currentValue.Action, []],
-      BoundDevice: [changes?.['modelNode'].currentValue.BoundDevice, []],
-      BoundField: [changes?.['modelNode'].currentValue.BoundField, []]
+      InboundDevice: [changes?.['modelNode'].currentValue.InboundDevice, []],
+      InboundField: [changes?.['modelNode'].currentValue.InboundField, []],
+      OutboundDevice: [changes?.['modelNode'].currentValue.OutboundDevice, []],
+      OutboundField: [changes?.['modelNode'].currentValue.OutboundField, []]
     });
   }
 
@@ -69,8 +75,10 @@ export class NodeFormComponent implements OnChanges {
         IsStored: this.form.value.ValueType == 2 || this.form.value.ValueType == 4 ? false : this.form.value.IsStored,
         Expression: this.form.value.Expression,
         Action: this.form.value.Action,
-        BoundDevice: this.form.value.BoundDevice,
-        BoundField: this.form.value.BoundField
+        InboundDevice: this.form.value.InboundDevice,
+        InboundField: this.form.value.InboundField,
+        OutboundDevice: this.form.value.OutboundDevice,
+        OutboundField: this.form.value.OutboundField
       };
       this.modelNodeChange.emit(updatedModelNode);
       this.msg.success(`提交成功`);
