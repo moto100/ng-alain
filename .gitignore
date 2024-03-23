@@ -46,3 +46,4 @@ Thumbs.db
 /yarn.lock
 
 /delon-builds
+package-lock.json
