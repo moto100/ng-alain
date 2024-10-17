@@ -28,13 +28,18 @@
               "zone.js"
             ],
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              },
               "src/assets",
               "src/favicon.ico"
             ],
             "styles": [
               "src/styles.less"
             ],
-            "scripts": ["node_modules/echarts/dist/echarts.js"],
+            "scripts": [],
+            "inlineStyleLanguage": "less",
             "allowedCommonJsDependencies": [
               "ajv",
               "ajv-formats",
@@ -108,9 +113,14 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "less",
             "scripts": [],
             "styles": [],
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "public"
+              },
               "src/assets"
             ]
           }
