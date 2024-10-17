@@ -31,7 +31,7 @@
     <input nz-input formControlName="Server" placeholder="给该设备指定服务地址" />
   </se>
   <se label="端口" extra="端口号" required>
-    <nz-input-number formControlName="Port" placeholder="请输入"></nz-input-number>
+    <nz-input-number formControlName="Port" placeholder="请输入" />
   </se>
   <se label="连接用户名">
     <input nz-input formControlName="User" placeholder="给该设备指定连接用户名" />
@@ -47,7 +47,7 @@
     </nz-radio-group>
   </se>
   <se label="保留标志(Retain)">
-    <nz-switch formControlName="Retained" nzCheckedChildren="保留" nzUnCheckedChildren="不保留"></nz-switch>
+    <nz-switch formControlName="Retained" nzCheckedChildren="保留" nzUnCheckedChildren="不保留" />
   </se>
   <se label="订阅话题(Topic)" extra="用于接收数据的话题">
     <button nz-button nzType="primary" (click)="addTopic()">增加话题</button>
@@ -87,44 +87,44 @@
 
   <se
     label="接收到数据后触发的脚本"
-    [optionalHelp]="
-      '调试脚本：第一步，打开网站 http://jsrun.net/new ， 选择 <JS活页>。 ' +
-      '第二步 ：拷贝以下脚本到<JS活页>顶端。    ' +
-      this.predefinedJSObject +
-      '    第三步 在拷贝到<JS活页>的脚本的下面继续编写自己的脚本，点<运行>测试脚本，确保脚本不出错。 第四步  拷贝回自己编写的脚本到平台上对应的位置。'
-    "
     extra="支持基于JavaScript算术计算和内置对象；
   例如  Console.Log('') 在黑屏上打印出来内容； 
   DataSource.DataSet是接收到物理设备上传上来的数据内容，对于MQTT，它通常是JSON字符串；
   Device.SetField('虚拟设备字段', 'AAA') 保存数据到该虚拟设备上；Device.GetFieldValue('虚拟设备字段') 从虚拟设备上获取字段数据；"
   >
-    <textarea
+    <!-- <textarea
       nz-input
       formControlName="SubscriptionResultParser"
       [nzAutosize]="{ minRows: 4 }"
       placeholder="当有物理设备数据进来后会触发执行的脚本，通常是用来更新虚拟设备字段的数据。"
-    ></textarea>
+    ></textarea> -->
+    <codemirror
+      #cmSubscriptionResultParser
+      [code]="codeSubscriptionResultParser"
+      tooltip="当物理设备数据进上传到系统里后触发执行的脚本，通常是用来更新虚拟设备字段的数据."
+      height="100px"
+    />
   </se>
 
   <se
     label="发送数据前触发的处理脚本"
-    [optionalHelp]="
-      '调试脚本：第一步，打开网站 http://jsrun.net/new ， 选择 <JS活页>。 ' +
-      '第二步 ：拷贝以下脚本到<JS活页>顶端。    ' +
-      this.predefinedJSObject +
-      '    第三步 在拷贝到<JS活页>的脚本的下面继续编写自己的脚本，点<运行>测试脚本，确保脚本不出错。 第四步  拷贝回自己编写的脚本到平台上对应的位置。'
-    "
     extra="支持基于JavaScript算术计算和内置对象；
   例如  Console.Log('') 在黑屏上打印出来内容； 
   Device.SetField('虚拟设备字段', 'AAA') 保存数据到该虚拟设备上；Device.GetFieldValue('虚拟设备字段') 从虚拟设备上获取字段数据；
   Device.SetWrittenField('DeviceId', '1234567890') 用来修改即将发送到物理设备的数据内容，例如加入设备标识；"
   >
-    <textarea
+    <!-- <textarea
       nz-input
       formControlName="OnPublishmentParser"
       [nzAutosize]="{ minRows: 4 }"
       placeholder="当有向物理设备发送数据前触发执行的脚本，通常是用来更改向物理设备发送的数据，例如加入设备标识：Device.SetWrittenField('DeviceId', '1234567890')；"
-    ></textarea>
+    ></textarea> -->
+    <codemirror
+      #cmOnPublishmentParser
+      [code]="codeOnPublishmentParser"
+      tooltip="当向物理设备发送数据前触发执行的脚本，通常是用来添加或者更改向物理设备发送的数据，例如加入设备标识：Device.SetWrittenField('DeviceId', '1234567890')；"
+      height="100px"
+    />
   </se>
   <se>
     <button nz-button nzType="primary" [disabled]="form.invalid" (click)="submit()" [nzLoading]="submitting">保存</button>

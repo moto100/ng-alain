@@ -1,0 +1,15 @@
+<div nz-row style="border: 1px solid #666; padding: 0px">
+  <div nz-col nzMd="16" nzLg="16" style="border-right: 1px solid #666">
+    <codemirror
+      #cmJsTool
+      [code]="codeContent"
+      height="700px"
+      tooltip="在线的脚本编辑工具，主要方便编写脚本和检查脚本错误，不代表实际的运行结果"
+    />
+  </div>
+  <div nz-col nzMd="6" nzLg="6">
+    <button nz-button nzType="primary" (click)="submit()">检查脚本</button>
+    <span>如有错误将显示下面。</span>
+    <div #outputRef style="height: 700px; overflow: auto"> </div>
+  </div>
+</div>

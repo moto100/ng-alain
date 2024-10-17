@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Inject, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Inject, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NZ_DRAWER_DATA, NzDrawerRef } from 'ng-zorro-antd/drawer';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -8,11 +8,10 @@ interface IModalData {
 }
 
 @Component({
-  selector: 'app-project-form',
-  templateUrl: './project-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-chart-config',
+  templateUrl: './chart-config.component.html'
 })
-export class ProjectFormComponent implements OnInit {
+export class ChartConfigComponent implements OnInit {
   form!: FormGroup;
   submitting = false;
   @Input() projectInfo: any;
@@ -67,9 +66,6 @@ export class ProjectFormComponent implements OnInit {
   }
 
   submit(): void {
-    if (this.form.invalid) {
-      return;
-    }
     this.submitting = true;
     let url = this.form.value.ApiAddress;
     if (url != null) {
@@ -84,25 +80,24 @@ export class ProjectFormComponent implements OnInit {
       this.submitting = false;
       return;
     }
-    //setTimeout(() => {
-    this.submitting = false;
-    this.drawerRef.close({
-      Id: this.projectInfo.Id,
-      Name: this.form.value.Name,
-      Desc: this.form.value.Desc,
-      LogLevel: this.form.value.LogLevel,
-      ApiAddress: url,
-      // EnableInfluxDB: this.form.value.EnableInfluxDB,
-      // InfluxDBAddress: this.form.value.InfluxDBAddress,
-      // InfluxDBOrganizationId: this.form.value.InfluxDBOrganizationId,
-      // InfluxDBBucketName: this.form.value.InfluxDBBucketName,
-      // InfluxDBMeasurement: this.form.value.InfluxDBMeasurement,
-      // InfluxDBAccessToken: this.form.value.InfluxDBAccessToken,
-      Deployed: this.projectInfo.Deployed == null ? false : this.projectInfo.Deployed
-    });
-    this.msg.success(`保存成功`);
-
-    //}, 1000);
+    setTimeout(() => {
+      this.submitting = false;
+      this.drawerRef.close({
+        Id: this.projectInfo.Id,
+        Name: this.form.value.Name,
+        Desc: this.form.value.Desc,
+        LogLevel: this.form.value.LogLevel,
+        ApiAddress: url,
+        // EnableInfluxDB: this.form.value.EnableInfluxDB,
+        // InfluxDBAddress: this.form.value.InfluxDBAddress,
+        // InfluxDBOrganizationId: this.form.value.InfluxDBOrganizationId,
+        // InfluxDBBucketName: this.form.value.InfluxDBBucketName,
+        // InfluxDBMeasurement: this.form.value.InfluxDBMeasurement,
+        // InfluxDBAccessToken: this.form.value.InfluxDBAccessToken,
+        Deployed: this.projectInfo.Deployed == null ? false : this.projectInfo.Deployed
+      });
+      this.msg.success(`保存成功`);
+    }, 1000);
   }
 
   cancel(): void {

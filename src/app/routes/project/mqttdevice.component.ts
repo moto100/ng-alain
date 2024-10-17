@@ -8,12 +8,15 @@ import {
   EventEmitter,
   SimpleChanges,
   OnChanges,
+  ViewChild,
   inject
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UUID } from 'angular2-uuid';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
+
+import { CodeMirrorComponent } from './codemirror.component';
 interface IModalData {
   Device: any;
 }
@@ -28,6 +31,14 @@ export class MqttDeviceComponent implements OnInit {
   subscriptionTopics: any[] = [];
   publishmentTopics: any[] = [];
   @Input() Device: any;
+  @ViewChild('cmOnPublishmentParser')
+  cmOnPublishmentParser: CodeMirrorComponent = new CodeMirrorComponent();
+  codeOnPublishmentParser: string = '';
+
+  @ViewChild('cmSubscriptionResultParser')
+  cmSubscriptionResultParser: CodeMirrorComponent = new CodeMirrorComponent();
+  codeSubscriptionResultParser: string = '';
+
   predefinedJSObject =
     'var DataSource = {' +
     "  DataSet : ''," +
@@ -81,6 +92,8 @@ export class MqttDeviceComponent implements OnInit {
     });
     this.subscriptionTopics = this.Device.SubscriptionTopics;
     this.publishmentTopics = this.Device.PublishmentTopics == null ? [] : this.Device.PublishmentTopics;
+    this.codeOnPublishmentParser = this.Device.OnPublishmentParser;
+    this.codeSubscriptionResultParser = this.Device.SubscriptionResultParser;
   }
 
   deleteTopic(topic: any): void {
@@ -156,9 +169,9 @@ export class MqttDeviceComponent implements OnInit {
           Retained: this.form.value.Retained
         },
         SubscriptionTopics: this.subscriptionTopics.filter(item => item.Topic != ''),
-        SubscriptionResultParser: this.form.value.SubscriptionResultParser,
+        SubscriptionResultParser: this.cmSubscriptionResultParser.getCode(),
         PublishmentTopics: this.publishmentTopics.filter(item => item.Topic != '' && item.Fields != ''),
-        OnPublishmentParser: this.form.value.OnPublishmentParser
+        OnPublishmentParser: this.cmOnPublishmentParser.getCode()
       });
       this.msg.success(`保存成功`);
       this.cdr.detectChanges();

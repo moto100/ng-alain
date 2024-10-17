@@ -1,18 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { ChartListComponent } from './chart-list.component';
+import { ChartComponent } from './chart.component';
+import { CodeMirrorComponent } from './codemirror.component';
 import { DataStorageComponent } from './data-storage.component';
 import { DeviceListComponent } from './device-list.component';
 import { DeviceSecurityComponent } from './device-security.component';
+import { JsToolComponent } from './jstool.component';
 import { ModelTreeComponent } from './model-tree.component';
 import { ProjectDesignComponent } from './project-design.component';
 import { ProjectListComponent } from './project-list.component';
 import { ProjectLogComponent } from './project-log.component';
-
 const routes: Routes = [
   { path: '', redirectTo: 'project-list', pathMatch: 'full' },
   { path: 'project-list', component: ProjectListComponent },
   { path: 'project-log', component: ProjectLogComponent },
+  { path: 'project-chart', component: ChartComponent },
+  { path: 'chart-list', component: ChartListComponent },
+  { path: 'project-codemirror', component: CodeMirrorComponent },
+  { path: 'project-jstool', component: JsToolComponent },
   {
     path: 'project-design',
     component: ProjectDesignComponent,

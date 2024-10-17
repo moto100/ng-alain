@@ -8,11 +8,14 @@ import {
   EventEmitter,
   SimpleChanges,
   OnChanges,
-  inject
+  inject,
+  ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
+
+import { CodeMirrorComponent } from './codemirror.component';
 interface IModalData {
   Device: any;
 }
@@ -26,6 +29,9 @@ export class SimulaterComponent implements OnInit {
   form!: FormGroup;
   submitting = false;
   @Input() Device: any;
+  @ViewChild('cmResultParser')
+  cmResultParser: CodeMirrorComponent = new CodeMirrorComponent();
+  codeResultParser: string = '';
   predefinedJSObject =
     'var DataSource = {' +
     "  DataSet : ''," +
@@ -75,6 +81,7 @@ export class SimulaterComponent implements OnInit {
       IntegerStep: [this.Device.Options.IntegerStep, [Validators.min(1)]],
       ResultParser: [this.Device.ResultParser, []]
     });
+    this.codeResultParser = this.Device.ResultParser;
   }
 
   destroyModal(result: any): void {
@@ -101,7 +108,7 @@ export class SimulaterComponent implements OnInit {
           MaxInteger: this.form.value.MaxInteger,
           IntegerStep: this.form.value.IntegerStep
         },
-        ResultParser: this.form.value.ResultParser
+        ResultParser: this.cmResultParser.getCode()
       });
       this.msg.success(`保存成功`);
       this.cdr.detectChanges();

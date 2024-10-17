@@ -11,29 +11,25 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { _HttpClient } from '@delon/theme';
+import { _HttpClient, DrawerHelper } from '@delon/theme';
 import { UUID } from 'angular2-uuid';
-import { NzDrawerRef, NzDrawerService } from 'ng-zorro-antd/drawer';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NZ_DRAWER_DATA, NzDrawerRef, NzDrawerService } from 'ng-zorro-antd/drawer';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
+import { finalize } from 'rxjs';
 
+import { ChartConfigComponent } from './chart-config.component';
 import { ProjectFormComponent } from './project-form.component';
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
-  styles: [
-    `
-      :host ::ng-deep .ant-card-meta-title {
-        margin-bottom: 12px;
-      }
-    `
-  ],
+  selector: 'app-chart-list',
+  templateUrl: './chart-list.component.html',
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectListComponent implements OnInit {
+export class ChartListComponent implements OnInit {
   list: Array<{
     Id: string;
     Name: string;
@@ -51,7 +47,7 @@ export class ProjectListComponent implements OnInit {
     // InfluxDBAccessToken: string;
   }> = [];
   loading = true;
-  drawerRef!: NzDrawerRef<ProjectFormComponent, any>;
+  drawerRef!: NzDrawerRef<ChartConfigComponent, any>;
   runningApps: Array<{ Id: string; TimeoutId: NodeJS.Timeout | null }> = [];
   // deployedProjectId = "";
   // runningProjectId = "";
@@ -73,6 +69,7 @@ export class ProjectListComponent implements OnInit {
     private modalSrv: NzModalService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private modalHelper: DrawerHelper,
     private drawerService: NzDrawerService
   ) {}
 
@@ -226,15 +223,24 @@ export class ProjectListComponent implements OnInit {
   }
 
   editNewProjectInternal(project: any, title: string, list: any): void {
-    this.drawerRef = this.drawerService.create<ProjectFormComponent>({
-      nzTitle: title,
-      //nzFooter: 'Footer',
+    // this.modalHelper.create('View', ChartConfigComponent, {
+    //   nzModalData: {
+    //     projectInfo: project,
+    //     list: list.filter((x: { Id: any }) => x?.Id != project.Id)
+    //   }
+    // }).subscribe(res => {
+    //   this.msg.info(res);
+    // });
+
+    //this.openComponent();
+    this.drawerRef = this.drawerService.create<ChartConfigComponent>({
+      nzTitle: 'Component',
+      nzFooter: 'Footer',
       nzExtra: this.extra,
       nzMask: false,
       nzSize: 'large',
-      nzContent: ProjectFormComponent,
-      // nzContentParams: {
-      // },
+      nzContent: ChartConfigComponent,
+      nzContentParams: {},
       nzData: {
         projectInfo: project,
         list: list.filter((x: { Id: any }) => x?.Id != project.Id)
@@ -273,6 +279,66 @@ export class ProjectListComponent implements OnInit {
         }
       }
     });
+
+    // let modal = this.modalSrv.create({
+    //   nzTitle: title,
+    //   nzWidth: 800,
+    //   nzStyle: { top: '10px' },
+    //   nzContent: ProjectFormComponent,
+    //   nzFooter: null,
+    //   nzData: {
+    //     projectInfo: project,
+    //     list: list.filter((x: { Id: any }) => x?.Id != project.Id)
+    //   }
+    // });
+
+    // modal.afterClose.subscribe(result => {
+    //   if (result != null) {
+    //     if (result.Id != null && result.Id != '') {
+    //       let project = this.list.find(value => value?.Id == result.Id);
+    //       if (project != null) {
+    //         project.Name = result.Name;
+    //         project.Desc = result.Desc;
+    //         project.Avatar = '';
+    //         project.LogLevel = result.LogLevel;
+    //         project.ApiAddress = result.ApiAddress;
+    //         project.Deployed = result.Deployed;
+    //         //project.IsRunning = result.IsRunning;
+    //         // project.EnableInfluxDB= result.EnableInfluxDB,
+    //         // project.InfluxDBAddress= result.InfluxDBAddress,
+    //         // project.InfluxDBOrganizationId= result.InfluxDBOrganizationId,
+    //         // project.InfluxDBBucketName= result.InfluxDBBucketName,
+    //         // project.InfluxDBMeasurement= result.InfluxDBMeasurement,
+    //         // project.InfluxDBAccessToken= result.InfluxDBAccessToken,
+    //         //project.Running = false;
+    //         this.UpdateProjects();
+    //         this.cdr.detectChanges();
+    //       } else {
+    //         this.list = this.list.concat([
+    //           {
+    //             Id: result.Id,
+    //             Name: result.Name,
+    //             Desc: result.Desc,
+    //             Avatar: '',
+    //             ApiAddress: result.ApiAddress,
+    //             Deployed: false,
+    //             IsRunning: false,
+    //             LogLevel: result.LogLevel
+    //             //     EnableInfluxDB: result.EnableInfluxDB,
+    //             //     InfluxDBAddress: result.InfluxDBAddress,
+    //             // InfluxDBOrganizationId: result.InfluxDBOrganizationId,
+    //             // InfluxDBBucketName: result.InfluxDBBucketName,
+    //             // InfluxDBMeasurement: result.InfluxDBMeasurement,
+    //             // InfluxDBAccessToken: result.InfluxDBAccessToken,
+    //             //Running : false
+    //           }
+    //         ]);
+    //         this.UpdateProjects();
+    //         this.cdr.detectChanges();
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   close(): void {
@@ -424,87 +490,5 @@ export class ProjectListComponent implements OnInit {
     //   //     parent.cdr.detectChanges();
     //   //   }
     // });
-  }
-
-  startAllDepolyedProjects(): void {
-    let pros = this.list.filter(x => x?.Deployed);
-    if (pros.length == 0) {
-      this.msg.info(`没有发布的应用可以运行！`);
-      return;
-    }
-
-    let modal = this.modalSrv.confirm({
-      nzTitle: '<i>确定要运行全部已发布的应用？</i>',
-      nzOnOk: () => {
-        //this.deployedProject =project;
-        this.loading = true;
-        this.http.post('controlpanel/www', { function: 'StartDeployedProjects' }).subscribe(res => {
-          if (res.Status != 200) {
-            this.modalSrv.info({
-              nzTitle: `操作出错！错误代码：${res.Status}; 错误信息：${res.Message}`
-            });
-          }
-          //this.ngOnInit();
-          //this.deployedProjectId = "";
-          this.ngOnInit();
-          // if (item.ApiAddress != null && item.ApiAddress.trim() != "" )
-          // {
-          //   this.deployedProjectId = item.Id;
-          //   this.deployedProject.Deployed = true;
-          //   this.keepAlive(item.ApiAddress + "/service/KeepAlive");
-          // }
-          this.loading = false;
-          this.cdr.detectChanges();
-        });
-      }
-    });
-  }
-
-  stopAllDepolyedProjects(): void {
-    let pros = this.list.filter(x => x?.Deployed);
-    if (pros.length == 0) {
-      this.msg.info(`没有运行中的应用！`);
-      return;
-    }
-
-    let modal = this.modalSrv.confirm({
-      nzTitle: '<i>确定要停止全部运行中的应用？</i>',
-      nzOnOk: () => {
-        //this.deployedProject =project;
-        this.loading = true;
-        this.http.post('controlpanel/www', { function: 'StopDeployedProjects' }).subscribe(res => {
-          if (res.Status != 200) {
-            this.modalSrv.info({
-              nzTitle: `操作出错！错误代码：${res.Status}; 错误信息：${res.Message}`
-            });
-          }
-
-          this.list.forEach(project => {
-            project.IsRunning = false;
-          });
-          //this.ngOnInit();
-          //this.deployedProjectId = "";
-          if (this.runningApps != null && this.runningApps.length > 0) {
-            this.runningApps.forEach(app => {
-              //app.IsRunning = false;
-              if (app.TimeoutId != null) {
-                try {
-                  clearTimeout(app.TimeoutId);
-                  app.TimeoutId = null;
-                } catch (error) {}
-              }
-            });
-          }
-          // if (item.ApiAddress != null && item.ApiAddress.trim() != "" )
-          // {
-          //   this.deployedProjectId = item.Id;
-          //   this.deployedProject.Deployed = true;
-          //   this.keepAlive(item.ApiAddress + "/service/KeepAlive");
-          // }
-          this.loading = false;
-          this.cdr.detectChanges();
-        });
-      }
-    });
   }
 }

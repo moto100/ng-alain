@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 // import { CountDownModule } from '@delon/abc/count-down';
 // import { OnboardingModule } from '@delon/abc/onboarding';
 // import { QuickMenuModule } from '@delon/abc/quick-menu';
@@ -16,13 +15,20 @@ import { NgModule } from '@angular/core';
 // import { G2TimelineModule } from '@delon/chart/timeline';
 // import { TrendModule } from '@delon/chart/trend';
 // import { G2WaterWaveModule } from '@delon/chart/water-wave';
+//import { CountdownModule } from 'ngx-countdown';
+import { NgModule } from '@angular/core';
 import { EllipsisModule } from '@delon/abc/ellipsis';
 import { SharedModule } from '@shared';
-//import { CountdownModule } from 'ngx-countdown';
+import { NgxEchartsModule } from 'ngx-echarts';
 
+import { ChartConfigComponent } from './chart-config.component';
+import { ChartListComponent } from './chart-list.component';
+import { ChartComponent } from './chart.component';
+import { CodeMirrorComponent } from './codemirror.component';
 import { DataStorageComponent } from './data-storage.component';
 import { DeviceListComponent } from './device-list.component';
 import { DeviceSecurityComponent } from './device-security.component';
+import { JsToolComponent } from './jstool.component';
 import { ModelTreeComponent } from './model-tree.component';
 import { MqttDeviceComponent } from './mqttdevice.component';
 import { NodeFormComponent } from './node-form.component';
@@ -44,7 +50,12 @@ const COMPONENTS = [
   MqttDeviceComponent,
   DeviceSecurityComponent,
   DataStorageComponent,
-  ProjectLogComponent
+  ProjectLogComponent,
+  ChartComponent,
+  CodeMirrorComponent,
+  JsToolComponent,
+  ChartListComponent,
+  ChartConfigComponent
 ];
 
 @NgModule({
@@ -70,7 +81,10 @@ const COMPONENTS = [
     // QuickMenuModule,
     // OnboardingModule,
     // NzPaginationModule,
-    EllipsisModule
+    EllipsisModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
   ],
   declarations: [...COMPONENTS]
 })

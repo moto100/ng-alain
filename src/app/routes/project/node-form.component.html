@@ -37,32 +37,19 @@
   </se>
   <se
     label="表达式"
-    [optionalHelp]="
-      '调试脚本：第一步，打开网站 http://jsrun.net/new ， 选择 <JS活页>。 ' +
-      '第二步 ：拷贝以下脚本到<JS活页>顶端。    ' +
-      this.predefinedJSObject +
-      '    第三步 在拷贝到<JS活页>的脚本的下面继续编写自己的脚本，点<运行>测试脚本，确保脚本不出错。 第四步  拷贝回自己编写的脚本到平台上对应的位置。'
-    "
     extra="支持基于JavaScript算术计算和内置对象,例如 DevicesProxy.GetData('虚拟设备名称','虚拟设备字段');也可以引用其他节点，格式：Root.节点1.节点1-1.Value。"
   >
-    <input nz-input formControlName="Expression" placeholder="给该节点设置一个表达式来计算节点的数值。" />
+    <!-- <input nz-input formControlName="Expression" placeholder="给该节点设置一个表达式来计算节点的数值。" /> -->
+    <codemirror #cmExpression [code]="codeExpression" tooltip="给该节点设置一个表达式来计算节点的数值。" />
   </se>
   <se
     label="脚本"
-    [optionalHelp]="
-      '调试脚本：第一步，打开网站 http://jsrun.net/new ， 选择 <JS活页>。 ' +
-      '第二步 ：拷贝以下脚本到<JS活页>顶端。    ' +
-      this.predefinedJSObject +
-      '    第三步 在拷贝到<JS活页>的脚本的下面继续编写自己的脚本，点<运行>测试脚本，确保脚本不出错。 第四步  拷贝回自己编写的脚本到平台上对应的位置。'
-    "
     extra="支持基于JavaScript算术计算和内置对象,例如 DevicesProxy.GetData('虚拟设备名称','虚拟设备字段'); Console.Log('') 在黑屏上打印出来内容； 也可以引用其他节点，格式：Root.节点1.节点1-1.Value = 'AAA'. "
   >
-    <textarea
-      nz-input
-      formControlName="Action"
-      [nzAutosize]="{ minRows: 4 }"
-      placeholder="当该节点的数值变化后会执行的脚本，通常是来触发关联节点的数据更新。"
-    ></textarea>
+    <!-- <textarea nz-input formControlName="Action" [nzAutosize]="{ minRows: 4 }"
+      placeholder="当该节点的数值变化后会执行的脚本，通常是来触发关联节点的数据更新。"></textarea> -->
+
+    <codemirror #cmAction [code]="codeAction" height="100px" tooltip="当该节点的数值变化后会执行的脚本，通常是来触发关联节点的数据更新。" />
   </se>
   <se label="入站设备名称" extra="当设置了此项，原本的《表达式》设置会失效！！！">
     <input nz-input formControlName="InboundDevice" placeholder="用于绑定到对应的入站设备，设备名称是虚拟设备名称。" />

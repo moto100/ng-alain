@@ -7,11 +7,13 @@ import {
   Output,
   EventEmitter,
   SimpleChanges,
-  OnChanges
+  OnChanges,
+  ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
+import { CodeMirrorComponent } from './codemirror.component';
 @Component({
   selector: 'app-node-form',
   templateUrl: './node-form.component.html',
@@ -22,6 +24,15 @@ export class NodeFormComponent implements OnChanges {
   submitting = false;
   @Input() modelNode: any;
   @Output() readonly modelNodeChange = new EventEmitter<object>();
+
+  @ViewChild('cmExpression')
+  cmExpression: CodeMirrorComponent = new CodeMirrorComponent();
+
+  @ViewChild('cmAction')
+  cmAction: CodeMirrorComponent = new CodeMirrorComponent();
+
+  codeAction: string = '';
+  codeExpression: string = '';
   predefinedJSObject =
     'var Console = {' +
     'log : function(message){' +
@@ -61,6 +72,10 @@ export class NodeFormComponent implements OnChanges {
       OutboundDevice: [changes?.['modelNode'].currentValue.OutboundDevice, []],
       OutboundField: [changes?.['modelNode'].currentValue.OutboundField, []]
     });
+    //this.cmExpression.setCode(changes?.['modelNode'].currentValue.Expression);
+    //this.cmAction.setCode(changes?.['modelNode'].currentValue.cmAction);
+    this.codeAction = changes?.['modelNode'].currentValue.Action;
+    this.codeExpression = changes?.['modelNode'].currentValue.Expression;
   }
 
   submit(): void {
@@ -73,8 +88,8 @@ export class NodeFormComponent implements OnChanges {
         ValueType: this.form.value.ValueType,
         IsHiden: this.form.value.IsHiden,
         IsStored: this.form.value.ValueType == 2 || this.form.value.ValueType == 4 ? false : this.form.value.IsStored,
-        Expression: this.form.value.Expression,
-        Action: this.form.value.Action,
+        Expression: this.cmExpression.getCode(),
+        Action: this.cmAction.getCode(),
         InboundDevice: this.form.value.InboundDevice,
         InboundField: this.form.value.InboundField,
         OutboundDevice: this.form.value.OutboundDevice,
